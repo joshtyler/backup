@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Simple tool to handle incremental backups
+# Simple tool to create incremental backups
 
-check_folder() {
+check_folder_exists() {
 	if [ ! -d ${1} ]; then
 		echo "Folder ${1} does not exist"
 		exit 1
@@ -14,33 +14,16 @@ trim_trailing_slashes() {
 	echo "$RESULT"
 }
 
-if [ "$#" -ne 3 ]; then
-	echo "Usage ${0} [backup/restore] [folder to backup] [backup destination folder] "
+if [ "$#" -ne 2 ]; then
+	echo "Usage ${0} [folder to backup] [backup output folder]"
 	exit 1
 fi
 
-ACTION=$1
-SOURCE_DIR= trim_trailing_slashes $2
-TAR_DIR=$3
+SOURCE_DIR=$(trim_trailing_slashes $1)
+TAR_DIR=$(trim_trailing_slashes $2)
 
-check_folder $SOURCE_DIR
-check_folder $TAR_DIR
+check_folder_exists $SOURCE_DIR
+check_folder_exists $TAR_DIR
 
-# Pass this function either --create or --extract
-do_tar() {
-	TARNAME=$(date +"%F_%H%M%S_%N")
-	tar ${ACTION} --listed-incremental=${TAR_DIR}/meta.snar --file=${TAR_DIR}/${TARNAME}.tar ${SOURCE_DIR}
-}
-
-
-case $1 in
-	"backup"*)
-		do_tar "--create"
-		;;
-	"restore"*)
-		do_tar "--extract"
-	;;
-	*)
-		echo "Invalid command"
-		exit 1
-esac
+TARNAME=$(date +"%F_%H%M%S_%N")
+tar --create --listed-incremental=${TAR_DIR}/meta.snar --file=${TAR_DIR}/${TARNAME}.tar ${SOURCE_DIR}
