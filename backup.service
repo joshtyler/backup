@@ -1,0 +1,7 @@
+[Unit]
+Description=Timed backups
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/bin/backup_script.sh
