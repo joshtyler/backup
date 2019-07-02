@@ -26,4 +26,4 @@ check_folder_exists $SOURCE_DIR
 check_folder_exists $TAR_DIR
 
 TARNAME=$(date +"%F_%H%M%S_%N")
-tar --create --listed-incremental=${TAR_DIR}/meta.snar --file=${TAR_DIR}/${TARNAME}.tar ${SOURCE_DIR}
+tar --create --bzip2 --listed-incremental=${TAR_DIR}/meta.snar --file=${TAR_DIR}/${TARNAME}.tar.bz2 ${SOURCE_DIR}
