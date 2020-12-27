@@ -52,4 +52,7 @@ echo "Syncing to backblaze"
 # We should set the lifecycle rules to keep all versions (default behaviour) just in case
 backblaze-b2 sync --threads 1 $BACKUPDIR $BUCKET_PATH
 
-} 2>&1 | tee ${BACKUPDIR}/${TIMESTAMP}.log
+} 2>&1 | tee ${BACKUPDIR}/../seafile-backup.log
+
+# Only move log after syuncing to stop b2 having problems syncing the log
+mv ${BACKUPDIR}/../seafile-backup.log ${BACKUPDIR}/${TIMESTAMP}.log
